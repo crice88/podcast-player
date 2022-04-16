@@ -21,3 +21,4 @@ yarn start:local
 - [ ] Add tests
 - [ ] Add precommit hooks
 - [ ] Add optional marker functionality
+- [ ] Handle 'play() request was interrupted by call to pause()' DOM error

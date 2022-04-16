@@ -27,29 +27,41 @@ export default function SeekBar({ audio, onSeek }: Props) {
     const dual = pos / max;
 
     onSeek(Math.round(audio.duration * dual));
+  };
+
+  const renderDuration = () => {
+    const totalTime = !isNaN(audio.duration) ? Math.trunc(audio.duration * 100) / 100 : 0;
+    return `${Math.ceil(audio.currentTime)} - ${totalTime}`;
   }
 
   useEffect(() => {
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("ended", () => setTime(audio.duration));
 
-    document.getElementById('progressBar')?.addEventListener('click', function (e) {
-      handleSeek(e, this.getBoundingClientRect());
-    });
+    document
+      .getElementById("progressBar")
+      ?.addEventListener("click", function (e) {
+        handleSeek(e, this.getBoundingClientRect());
+      });
 
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", () => setTime(0));
-      document.removeEventListener('click', () => handleSeek);
+      document.removeEventListener("click", () => handleSeek);
     };
   }, [audio]);
 
   return (
-    <div className="h-4 border border-gray-200 rounded-md" id="progressBar">
-      <div
-        className="h-4 bg-black rounded-md"
-        style={{ width: durationPercentage + "%" }}
-      />
-    </div>
+    <>
+      <div className="h-4 border border-gray-200 rounded-md" id="progressBar">
+        <div
+          className="h-4 bg-black rounded-md"
+          style={{ width: durationPercentage + "%" }}
+        />
+      </div>
+      <div className="flex flex-row justify-end text-sm">
+        { renderDuration() }
+      </div>
+    </>
   );
 }
