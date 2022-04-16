@@ -6,7 +6,7 @@ export interface Episode {
 }
 
 export interface Marker {
-  type: string;
+  type: 'ad' | 'text' | 'image';
   start: number;
   duration: number;
   content: string;

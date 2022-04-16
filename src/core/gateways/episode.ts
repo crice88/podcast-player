@@ -1,6 +1,6 @@
 import { get } from "../http";
 
-const url = "http://localhost:1337/episodes";
+const url = `${process.env.NEXT_PUBLIC_BASE_URL}/episodes`;
 
 export async function findOne(id?: string) {
   return get({ url: url + `/${id}` });

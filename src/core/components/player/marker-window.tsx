@@ -34,6 +34,23 @@ export default function MarkerWindow({ markers, audio, isPlaying }: Props) {
     }
   };
 
+  const renderMarker = () => {
+    if (marker?.type === 'ad') {
+      return (
+        <iframe src={marker.link} title={marker.content} className="h-full w-full" />
+      )
+    } else if (marker?.type === 'image') {
+      const url = process.env.NEXT_PUBLIC_BASE_URL + marker.content;
+      return (
+        <img src={url} alt="marker-image" className="h-full w-full" />
+      )
+    } else {
+      return (
+        <p>{marker?.content}</p>
+      )
+    }
+  }
+
   useEffect(() => {
     if (isPlaying) {
       handleTimeUpdate(Math.round(audio.currentTime));
@@ -53,7 +70,7 @@ export default function MarkerWindow({ markers, audio, isPlaying }: Props) {
   if (marker) {
     return (
       <div className="h-[300px] border-2 border-gray-200 rounded-sm">
-        {marker.content}
+        { renderMarker() }
       </div>
     );
   }

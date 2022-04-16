@@ -15,7 +15,8 @@ export default function PodcastPlayer({ episode }: Props) {
   const { markers } = episode;
 
   const audio = useMemo(() => {
-    return new Audio(`http://localhost:1337${episode.audio}`);
+    const url = process.env.NEXT_PUBLIC_BASE_URL + episode.audio;
+    return new Audio(url);
   }, [episode]);
 
   const handlePlay = async () => {
@@ -56,6 +57,8 @@ export default function PodcastPlayer({ episode }: Props) {
     });
 
     return () => {
+      audio.pause();
+      audio.currentTime = 0;
       audio.removeEventListener("ended", () => {
         return;
       });
@@ -64,10 +67,10 @@ export default function PodcastPlayer({ episode }: Props) {
 
   return (
     <div className="px-6 space-y-12">
-      <h2 className="text-3xl font-extrabold text-gray-900">Now playing</h2>
+      <h2 className="text-3xl font-extrabold text-gray-900">Now playing { episode.name }</h2>
       <div className="flex flex-row justify-center items-center">
         <div className="w-[650px] border-2 border-gray-200 rounded-sm p-4">
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col justify-center gap-4 w-full">
             {playing && (
               <MarkerWindow
                 markers={markers}
