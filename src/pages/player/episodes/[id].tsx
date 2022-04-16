@@ -1,26 +1,16 @@
 import { useRouter } from "next/router";
 
 import { useFetchEpisode } from "../../../core/hooks/use-fetch-episode";
+import PodcastPlayer from "../../../core/components/player";
 
 export default function Episode() {
   const {
     query: { id },
   } = useRouter();
-  const { isSuccess, isLoading, data } = useFetchEpisode(String(id));
-
-  const handlePlay = () => {
-    const audio = new Audio(`http://localhost:1337${data?.audio}`);
-    audio.play();
-  };
+  const { isSuccess, isLoading, data } = useFetchEpisode(id);
 
   if (isSuccess && data) {
-    return (
-      <div>
-        <h1>{data.name}</h1>
-        <br />
-        <button onClick={handlePlay}>Click Me!!</button>
-      </div>
-    );
+    return <PodcastPlayer episode={data} />;
   } else if (isLoading) {
     // skeleton
     return null;
