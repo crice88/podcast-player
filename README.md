@@ -17,7 +17,7 @@ yarn start:local
 - [x] Design basic wireframe
 - [x] Add player controls
 - [ ] Add markers
-- [ ] Add click to seek functionality
+- [x] Add click to seek functionality
 - [ ] Add tests
 - [ ] Add precommit hooks
 - [ ] Add optional marker functionality

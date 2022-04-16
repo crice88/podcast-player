@@ -45,6 +45,10 @@ export default function PodcastPlayer({ episode }: Props) {
     }
   };
 
+  const handleSeek = (time: number) => {
+    audio.currentTime = time;
+  }
+
   useEffect(() => {
     return () => {
       handleStop();
@@ -58,7 +62,7 @@ export default function PodcastPlayer({ episode }: Props) {
         <div className="w-[650px] border-2 border-gray-200 rounded-sm p-4">
           <div className="flex flex-col justify-center gap-4">
             <MarkerWindow episode={episode} />
-            <SeekBar audio={audio} />
+            <SeekBar audio={audio} onSeek={handleSeek} />
             <PlaybackControls
               onPlay={handlePlay}
               onPause={handlePause}
