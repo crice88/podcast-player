@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Episode } from "../../types";
 import MarkerWindow from "./marker-window";
@@ -10,21 +10,22 @@ interface Props {
 }
 
 export default function PodcastPlayer({ episode }: Props) {
+  const [playing, setPlaying] = useState(false);
+
+  const { markers } = episode;
+
   const audio = useMemo(() => {
     return new Audio(`http://localhost:1337${episode.audio}`);
   }, [episode]);
 
   const handlePlay = async () => {
+    setPlaying(true);
     await audio.play();
   };
 
-  const handlePause = async () => {
-    await audio.pause();
-  };
-
-  const handleStop = async () => {
-    await handlePause();
-    audio.currentTime = 0;
+  const handlePause = () => {
+    setPlaying(false);
+    audio.pause();
   };
 
   const handleRewind = async () => {
@@ -39,7 +40,7 @@ export default function PodcastPlayer({ episode }: Props) {
   const handleFastForward = async () => {
     const time = audio.currentTime + 5;
     if (time > audio.duration) {
-      await handleStop();
+      audio.currentTime = audio.duration;
     } else {
       audio.currentTime = time;
     }
@@ -47,11 +48,17 @@ export default function PodcastPlayer({ episode }: Props) {
 
   const handleSeek = (time: number) => {
     audio.currentTime = time;
-  }
+  };
 
   useEffect(() => {
+    audio.addEventListener("ended", async () => {
+      setPlaying(false);
+    });
+
     return () => {
-      handleStop();
+      audio.removeEventListener("ended", () => {
+        return;
+      });
     };
   }, [episode]);
 
@@ -61,12 +68,17 @@ export default function PodcastPlayer({ episode }: Props) {
       <div className="flex flex-row justify-center items-center">
         <div className="w-[650px] border-2 border-gray-200 rounded-sm p-4">
           <div className="flex flex-col justify-center gap-4">
-            <MarkerWindow episode={episode} />
+            {playing && (
+              <MarkerWindow
+                markers={markers}
+                audio={audio}
+                isPlaying={playing}
+              />
+            )}
             <SeekBar audio={audio} onSeek={handleSeek} />
             <PlaybackControls
               onPlay={handlePlay}
               onPause={handlePause}
-              onStop={handleStop}
               onRewind={handleRewind}
               onFastForward={handleFastForward}
             />

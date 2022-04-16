@@ -27,20 +27,22 @@ export default function SeekBar({ audio, onSeek }: Props) {
     const dual = pos / max;
 
     onSeek(Math.round(audio.duration * dual));
-  }
+  };
 
   useEffect(() => {
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("ended", () => setTime(audio.duration));
 
-    document.getElementById('progressBar')?.addEventListener('click', function (e) {
-      handleSeek(e, this.getBoundingClientRect());
-    });
+    document
+      .getElementById("progressBar")
+      ?.addEventListener("click", function (e) {
+        handleSeek(e, this.getBoundingClientRect());
+      });
 
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", () => setTime(0));
-      document.removeEventListener('click', () => handleSeek);
+      document.removeEventListener("click", () => handleSeek);
     };
   }, [audio]);
 
