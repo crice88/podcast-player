@@ -26,3 +26,4 @@ yarn start:local
 - [ ] Tighten up styles
 - [ ] Add duration counter to markers
 - [x] Add duration counter to running podcasts
+- [ ] Add skeleton layout for loading state
